@@ -58,8 +58,8 @@ def ejecutar_copia(servicio):
                 print(f"Error al copiar {archivo['name']}: {e}")
 
 if __name__ == '__main__':
-    # Aquí va tu código de autenticación para obtener 'servicio'
-    # servicio = ... 
+    # 1. Obtenemos la conexión usando los Secrets y la guardamos en 'servicio'
+    servicio = autenticar_github()
     
-    # Se ejecuta una sola vez por cada llamado de GitHub
+    # 2. Le pasamos esa conexión a la función que hace la copia
     ejecutar_copia(servicio)
