@@ -1,0 +1,32 @@
+name: Sincronizar Unidad Compartida a Mi Unidad
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Se ejecuta automáticamente cada 15 minutos
+  workflow_dispatch: # Te permite ejecutarlo manualmente desde GitHub si quieres probar
+
+jobs:
+  copiar_archivos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v3
+        
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Instalar dependencias de Google
+        run: pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
+        
+      - name: Ejecutar el script
+        run: python nombre_de_tu_script.py # Cambia esto por el nombre real de tu archivo Python
+        
+      - name: Guardar historial de copiados en el repositorio
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add copiados.txt
+          git commit -m "Actualizar historial de archivos copiados" || echo "No hay cambios nuevos para guardar"
+          git push
