@@ -1,32 +1,42 @@
-name: Sincronizar Unidad Compartida a Mi Unidad
+name: Sincronizador de Google Drive
 
 on:
   schedule:
     - cron: '*/15 * * * *' # Se ejecuta automáticamente cada 15 minutos
-  workflow_dispatch: # Te permite ejecutarlo manualmente desde GitHub si quieres probar
+  workflow_dispatch: # Te permite ejecutar el script manualmente con un botón
 
 jobs:
-  copiar_archivos:
+  sincronizar:
     runs-on: ubuntu-latest
+    
+    # Esto es crucial para que GitHub te permita guardar el archivo copiados.txt de vuelta en tu repo
+    permissions:
+      contents: write 
+
     steps:
       - name: Clonar el repositorio
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
       - name: Configurar Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          
-      - name: Instalar dependencias de Google
+
+      - name: Instalar dependencias
         run: pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
-        
-      - name: Ejecutar el script
-        run: python nombre_de_tu_script.py # Cambia esto por el nombre real de tu archivo Python
-        
-      - name: Guardar historial de copiados en el repositorio
+
+      - name: Ejecutar script de sincronización
+        env:
+          # Aquí llamamos a la bóveda de secretos que configuraste
+          GCP_TOKEN: ${{ secrets.GCP_TOKEN }}
+        # Asegúrate de que el nombre del archivo coincida exactamente con el de tu script
+        run: python sincronizar_drive.py 
+
+      - name: Guardar historial de archivos copiados
         run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
+          git config --global user.name 'GitHub Actions Automator'
+          git config --global user.email 'actions@github.com'
           git add copiados.txt
-          git commit -m "Actualizar historial de archivos copiados" || echo "No hay cambios nuevos para guardar"
+          # Si hay algo nuevo que guardar, hace el commit. Si no, simplemente avisa y continúa.
+          git commit -m "Actualiza registro de archivos copiados" || echo "No hay archivos nuevos copiados en esta revisión"
           git push
