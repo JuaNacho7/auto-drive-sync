@@ -30,7 +30,7 @@ jobs:
           # Aquí llamamos a la bóveda de secretos que configuraste
           GCP_TOKEN: ${{ secrets.GCP_TOKEN }}
         # Asegúrate de que el nombre del archivo coincida exactamente con el de tu script
-        run: python sincronizar_drive.py 
+        run: python Rclone.py 
 
       - name: Guardar historial de archivos copiados
         run: |
