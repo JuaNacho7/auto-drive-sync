@@ -4,7 +4,7 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 # ¡NO OLVIDES PEGAR AQUÍ TU ID DE NUEVO!
-UNIDAD_COMPARTIDA_ID = 'PEGA_AQUI_TU_ID'
+UNIDAD_COMPARTIDA_ID = '0AOretv_KlnerUk9PVA'
 ARCHIVO_REGISTRO = 'copiados.txt'
 
 def autenticar_github():
@@ -90,3 +90,4 @@ if __name__ == '__main__':
         ejecutar_copia(servicio)
     else:
         print("No se pudo iniciar el servicio de Google Drive. Deteniendo script.")
+
